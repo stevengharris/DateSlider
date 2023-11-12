@@ -1,5 +1,5 @@
 //
-//  DateSlider.swift
+//  DateSliderView.swift
 //  DateSlider
 //
 //  Created by Steven Harris on 10/24/23.
@@ -95,19 +95,11 @@ public struct DateSliderView: View {
                 let sliderWidth = sliderWidth()
                 // This is the view you slide a slider across to select a date.
                 ZStack(alignment: .leading) {
-                    #if os(macOS)
                     Rectangle()
                         .frame(width: width)
-                        .border(Color.gray)
-                        .foregroundColor(Color.gray)
+                        .border(barBorder())
+                        .foregroundColor(barForeground())
                         .zIndex(0)
-                    #else
-                    Rectangle()
-                        .frame(width: width)
-                        .border(Color(uiColor: .darkGray))
-                        .foregroundColor(Color(uiColor: .lightGray))
-                        .zIndex(0)
-                    #endif
                     // Place a tick mark at each date, but filter for large date sets.
                     // The active tick, which is what is identified by its date in the
                     // label, is colored the same as the label border and thicker than
@@ -139,7 +131,7 @@ public struct DateSliderView: View {
                             Label(format(sliderDate), image: "calendar")
                                 .frame(width: sliderWidth)
                                 .labelStyle(.titleOnly)
-                                .background(systemBackground())
+                                .background(sliderBackground())
                                 .cornerRadius(2)
                                 .overlay(
                                     RoundedRectangle(cornerRadius: 2)
@@ -153,33 +145,6 @@ public struct DateSliderView: View {
                 }
             }
         }
-    }
-    
-    @ViewBuilder
-    func systemBackground() -> Color {
-#if os(macOS)
-        Color.red
-#else
-        Color(uiColor: .systemBackground)
-#endif
-    }
-    
-    @ViewBuilder 
-    func lightGray() -> Color {
-#if os(macOS)
-        Color.gray
-#else
-        Color(uiColor: .lightGray)
-#endif
-    }
-    
-    @ViewBuilder 
-    func darkGray() -> Color {
-#if os(macOS)
-        Color.gray
-#else
-        Color(uiColor: .darkGray)
-#endif
     }
     
     public init(datedObjects: some DatedObjectCollection, format: DateFormat, onDateSelect: @escaping (Date)->()) {
@@ -197,14 +162,42 @@ public struct DateSliderView: View {
         _sliderDateIndex = State(initialValue: firstDateIndex)
     }
     
-    /// Update all the indices and dates to be consistent for `index`.
-    func setDateIndex(_ index: Int) {
-        let date = datedObjects[index].date
-        selectedDateIndex = index
-        draggingDate = date
-        sliderDateIndex = index
-        onDateSelect(date)
+    //MARK: Colors
+    
+    @ViewBuilder
+    func sliderBackground() -> Color {
+        #if os(macOS)
+        Color(.windowBackgroundColor)
+        #else
+        Color(uiColor: .systemBackground)
+        #endif
     }
+    
+    @ViewBuilder
+    func barForeground() -> Color {
+        #if os(macOS)
+        Color(.lightGray)
+        #else
+        Color(uiColor: .lightGray)
+        #endif
+    }
+    
+    @ViewBuilder
+    func barBorder() -> Color {
+        #if os(macOS)
+        Color(.darkGray)
+        #else
+        Color(uiColor: .darkGray)
+        #endif
+    }
+    
+    /// Return a color to use for the tick based on whether it is active or not.
+    @ViewBuilder
+    func tickColor(_ active: Bool) -> Color {
+        active ? Color.accentColor : barBorder()
+    }
+    
+    //MARK: Dragging
     
     /// Return the DragGesture that executes when the slider is dragged and when dragging stops.
     private func drag(in width: CGFloat) -> some Gesture {
@@ -231,14 +224,16 @@ public struct DateSliderView: View {
             }
     }
     
-    /// Return a string formatted according to the settings in `format`.
-    func format(_ date: Date) -> String {
-        let formatter = DateFormatter()
-        formatter.dateStyle = format.dateStyle
-        formatter.timeStyle = format.timeStyle
-        if format.timeZone != nil { formatter.timeZone = format.timeZone! }
-        return formatter.string(from: date)
+    /// Update all the indices and dates to be consistent for `index`.
+    func setDateIndex(_ index: Int) {
+        let date = datedObjects[index].date
+        selectedDateIndex = index
+        draggingDate = date
+        sliderDateIndex = index
+        onDateSelect(date)
     }
+    
+    //MARK: Conversions in width
     
     /// Return the amount to offset the label that floats over of the pointer to the date.
     ///
@@ -251,17 +246,6 @@ public struct DateSliderView: View {
         let offsetFromCenter = halfWidth - dateOffset   // + on leading, - on trailing
         let fraction = offsetFromCenter / halfWidth
         return sliderWidth / 2 * fraction
-    }
-    
-    /// Return the slider width based on the `format`.
-    func sliderWidth() -> CGFloat {
-        if format.isShortDate {
-            return 66
-        } else if format.isShortDateTime {
-            return 128
-        } else {
-            return 66
-        }
     }
     
     /// Return the offset of `date` from the leading edge of `width` where `width` extends from `leadingDate` to `trailingDate`.
@@ -277,6 +261,30 @@ public struct DateSliderView: View {
         let offsetInterval = totalSpan * offset / width
         return leadingDate.addingTimeInterval(offsetInterval)
     }
+    
+    //MARK: Utilities
+    
+    /// Return a string formatted according to the settings in `format`.
+    func format(_ date: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.dateStyle = format.dateStyle
+        formatter.timeStyle = format.timeStyle
+        if format.timeZone != nil { formatter.timeZone = format.timeZone! }
+        return formatter.string(from: date)
+    }
+    
+    /// Return the slider width based on the `format`.
+    func sliderWidth() -> CGFloat {
+        if format.isShortDate {
+            return 74
+        } else if format.isShortDateTime {
+            return 136
+        } else {
+            return 74
+        }
+    }
+    
+    //MARK: Ticks
     
     /// Return an array of offsets between `leadingDate` and `trailingDate`whose size
     /// is tailored to width.
@@ -316,12 +324,6 @@ public struct DateSliderView: View {
         let sliderDateOffset = self.offset(from: sliderDate, in: width).rounded(.towardZero)
         let active = offset.rounded(.towardZero) == sliderDateOffset
         return active
-    }
-    
-    /// Return a color to use for the tick based on whether it is active or not.
-    @ViewBuilder
-    func tickColor(_ active: Bool) -> Color {
-        active ? Color.accentColor : darkGray()
     }
     
     /// Return the width for the tick based on whether it is active or not.
@@ -471,6 +473,23 @@ public struct DateSliderView: View {
             }
             trailingDateIndex = newTrailingDateIndex
         }
+    }
+
+}
+
+struct DateSliderView_Previews: PreviewProvider {
+
+    static var previews: some View {
+        let dates = [
+            Date(),
+            Date().addingTimeInterval(100000),
+            Date().addingTimeInterval(200000),
+        ]
+        DateSliderView(datedObjects: dates, format: DateFormat.shortDateTimeLocal, onDateSelect: onDateSelect)
+    }
+    
+    static func onDateSelect(_ date: Date) {
+        print("Selected \(date)")
     }
 
 }

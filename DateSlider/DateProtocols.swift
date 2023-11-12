@@ -26,7 +26,7 @@ public extension DatedObject where Self: Equatable {
 }
 
 extension Date: DatedObject {
-    var date: Date { self }
+    public var date: Date { self }
 }
 
 /// A DatedObjectCollection is any RandomAccessCollection (e.g., like Array or OrderedSet) that contains DatedObjects as
@@ -34,7 +34,7 @@ extension Date: DatedObject {
 ///
 /// The extensions allow the DateSlider to accept both Array<DatedObject> and OrderedSet<DatedObject> , and
 /// by extension of Date to conform to DatedObject, also Array<Date> and OrderedSet<Date>.
-protocol DatedObjectCollection: RandomAccessCollection where Element: DatedObject, Index == Int, SubSequence: RandomAccessCollection {
+public protocol DatedObjectCollection: RandomAccessCollection where Element: DatedObject, Index == Int, SubSequence: RandomAccessCollection {
 }
 
 extension OrderedSet: DatedObjectCollection where Element: DatedObject, SubSequence == OrderedSet.SubSequence {}

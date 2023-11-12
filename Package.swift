@@ -6,15 +6,12 @@ import PackageDescription
 let package = Package(
     name: "DateSlider",
     platforms: [
-        .macOS(.v14),
         .macCatalyst(.v17),
         .iOS(.v17),
     ],
     products: [
         // Products define the executables and libraries a package produces, making them visible to other packages.
-        .library(
-            name: "DateSlider",
-            targets: ["DateSlider"]),
+        .library(name: "DateSlider", targets: ["DateSlider"]),
     ],
     dependencies: [
       .package(

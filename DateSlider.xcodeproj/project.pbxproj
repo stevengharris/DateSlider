@@ -8,11 +8,21 @@
 
 /* Begin PBXBuildFile section */
 		AA78A2232AFFF0F900AA3749 /* DateSlider.h in Headers */ = {isa = PBXBuildFile; fileRef = AA78A2222AFFF0F900AA3749 /* DateSlider.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		AA78A22E2AFFF1A800AA3749 /* RandomAccessCollection+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA78A2292AFFF1A800AA3749 /* RandomAccessCollection+Extensions.swift */; };
+		AA78A22F2AFFF1A800AA3749 /* DateFormat.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA78A22A2AFFF1A800AA3749 /* DateFormat.swift */; };
+		AA78A2312AFFF1A800AA3749 /* DateProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA78A22C2AFFF1A800AA3749 /* DateProtocols.swift */; };
+		AA78A2322AFFF1A800AA3749 /* DateSliderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA78A22D2AFFF1A800AA3749 /* DateSliderView.swift */; };
+		AA78A23A2AFFF22A00AA3749 /* OrderedCollections in Frameworks */ = {isa = PBXBuildFile; productRef = AA78A2392AFFF22A00AA3749 /* OrderedCollections */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		AA78A21F2AFFF0F900AA3749 /* DateSlider.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = DateSlider.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA78A2222AFFF0F900AA3749 /* DateSlider.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DateSlider.h; sourceTree = "<group>"; };
+		AA78A2292AFFF1A800AA3749 /* RandomAccessCollection+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "RandomAccessCollection+Extensions.swift"; sourceTree = "<group>"; };
+		AA78A22A2AFFF1A800AA3749 /* DateFormat.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DateFormat.swift; sourceTree = "<group>"; };
+		AA78A22C2AFFF1A800AA3749 /* DateProtocols.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DateProtocols.swift; sourceTree = "<group>"; };
+		AA78A22D2AFFF1A800AA3749 /* DateSliderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DateSliderView.swift; sourceTree = "<group>"; };
+		AA78A2332AFFF1CE00AA3749 /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Package.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -20,6 +30,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AA78A23A2AFFF22A00AA3749 /* OrderedCollections in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -29,6 +40,7 @@
 		AA78A2152AFFF0F800AA3749 = {
 			isa = PBXGroup;
 			children = (
+				AA78A2332AFFF1CE00AA3749 /* Package.swift */,
 				AA78A2212AFFF0F900AA3749 /* DateSlider */,
 				AA78A2202AFFF0F900AA3749 /* Products */,
 			);
@@ -45,6 +57,10 @@
 		AA78A2212AFFF0F900AA3749 /* DateSlider */ = {
 			isa = PBXGroup;
 			children = (
+				AA78A22A2AFFF1A800AA3749 /* DateFormat.swift */,
+				AA78A22C2AFFF1A800AA3749 /* DateProtocols.swift */,
+				AA78A22D2AFFF1A800AA3749 /* DateSliderView.swift */,
+				AA78A2292AFFF1A800AA3749 /* RandomAccessCollection+Extensions.swift */,
 				AA78A2222AFFF0F900AA3749 /* DateSlider.h */,
 			);
 			path = DateSlider;
@@ -78,6 +94,9 @@
 			dependencies = (
 			);
 			name = DateSlider;
+			packageProductDependencies = (
+				AA78A2392AFFF22A00AA3749 /* OrderedCollections */,
+			);
 			productName = DateSlider;
 			productReference = AA78A21F2AFFF0F900AA3749 /* DateSlider.framework */;
 			productType = "com.apple.product-type.framework";
@@ -93,6 +112,7 @@
 				TargetAttributes = {
 					AA78A21E2AFFF0F900AA3749 = {
 						CreatedOnToolsVersion = 15.0.1;
+						LastSwiftMigration = 1500;
 					};
 				};
 			};
@@ -105,6 +125,9 @@
 				Base,
 			);
 			mainGroup = AA78A2152AFFF0F800AA3749;
+			packageReferences = (
+				AA78A2342AFFF22A00AA3749 /* XCRemoteSwiftPackageReference "swift-collections" */,
+			);
 			productRefGroup = AA78A2202AFFF0F900AA3749 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -129,6 +152,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AA78A22F2AFFF1A800AA3749 /* DateFormat.swift in Sources */,
+				AA78A2312AFFF1A800AA3749 /* DateProtocols.swift in Sources */,
+				AA78A22E2AFFF1A800AA3749 /* RandomAccessCollection+Extensions.swift in Sources */,
+				AA78A2322AFFF1A800AA3749 /* DateSliderView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -140,6 +167,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				BUILD_LIBRARY_FOR_DISTRIBUTION = NO;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -206,6 +234,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				BUILD_LIBRARY_FOR_DISTRIBUTION = NO;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -263,6 +292,9 @@
 		AA78A2272AFFF0F900AA3749 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				BUILD_LIBRARY_FOR_DISTRIBUTION = NO;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
@@ -284,8 +316,13 @@
 				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu17 gnu++20";
 				PRODUCT_BUNDLE_IDENTIFIER = com.stevengharris.DateSlider;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = YES;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -294,6 +331,9 @@
 		AA78A2282AFFF0F900AA3749 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				BUILD_LIBRARY_FOR_DISTRIBUTION = NO;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
@@ -315,7 +355,11 @@
 				MODULE_VERIFIER_SUPPORTED_LANGUAGE_STANDARDS = "gnu17 gnu++20";
 				PRODUCT_BUNDLE_IDENTIFIER = com.stevengharris.DateSlider;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = YES;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -344,6 +388,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		AA78A2342AFFF22A00AA3749 /* XCRemoteSwiftPackageReference "swift-collections" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/apple/swift-collections.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.5;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		AA78A2392AFFF22A00AA3749 /* OrderedCollections */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = AA78A2342AFFF22A00AA3749 /* XCRemoteSwiftPackageReference "swift-collections" */;
+			productName = OrderedCollections;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = AA78A2162AFFF0F800AA3749 /* Project object */;
 }
