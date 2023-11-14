@@ -6,6 +6,7 @@ import PackageDescription
 let package = Package(
     name: "DateSlider",
     platforms: [
+        .macOS(.v14),
         .macCatalyst(.v17),
         .iOS(.v17),
     ],
