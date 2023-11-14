@@ -16,6 +16,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		AA226FEC2B0416B000B367DB /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		AA78A21F2AFFF0F900AA3749 /* DateSlider.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = DateSlider.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA78A2222AFFF0F900AA3749 /* DateSlider.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DateSlider.h; sourceTree = "<group>"; };
 		AA78A2292AFFF1A800AA3749 /* RandomAccessCollection+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "RandomAccessCollection+Extensions.swift"; sourceTree = "<group>"; };
@@ -40,6 +41,7 @@
 		AA78A2152AFFF0F800AA3749 = {
 			isa = PBXGroup;
 			children = (
+				AA226FEC2B0416B000B367DB /* README.md */,
 				AA78A2332AFFF1CE00AA3749 /* Package.swift */,
 				AA78A2212AFFF0F900AA3749 /* DateSlider */,
 				AA78A2202AFFF0F900AA3749 /* Products */,
