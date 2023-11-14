@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 56;
+	objectVersion = 60;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -11,6 +11,7 @@
 		AA9B956E2B03DE2800716594 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA9B956D2B03DE2800716594 /* ContentView.swift */; };
 		AA9B95702B03DE2900716594 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AA9B956F2B03DE2900716594 /* Assets.xcassets */; };
 		AA9B95732B03DE2900716594 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AA9B95722B03DE2900716594 /* Preview Assets.xcassets */; };
+		AA9B957B2B03DE6700716594 /* DateSlider in Frameworks */ = {isa = PBXBuildFile; productRef = AA9B957A2B03DE6700716594 /* DateSlider */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -19,6 +20,7 @@
 		AA9B956D2B03DE2800716594 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		AA9B956F2B03DE2900716594 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		AA9B95722B03DE2900716594 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		AA9B957C2B03DF0900716594 /* DateSliderDemo.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = DateSliderDemo.entitlements; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -26,6 +28,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AA9B957B2B03DE6700716594 /* DateSlider in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -51,6 +54,7 @@
 		AA9B956A2B03DE2800716594 /* DateSliderDemo */ = {
 			isa = PBXGroup;
 			children = (
+				AA9B957C2B03DF0900716594 /* DateSliderDemo.entitlements */,
 				AA9B956B2B03DE2800716594 /* DateSliderDemoApp.swift */,
 				AA9B956D2B03DE2800716594 /* ContentView.swift */,
 				AA9B956F2B03DE2900716594 /* Assets.xcassets */,
@@ -83,6 +87,9 @@
 			dependencies = (
 			);
 			name = DateSliderDemo;
+			packageProductDependencies = (
+				AA9B957A2B03DE6700716594 /* DateSlider */,
+			);
 			productName = DateSliderDemo;
 			productReference = AA9B95682B03DE2800716594 /* DateSliderDemo.app */;
 			productType = "com.apple.product-type.application";
@@ -111,6 +118,9 @@
 				Base,
 			);
 			mainGroup = AA9B955F2B03DE2800716594;
+			packageReferences = (
+				AA9B95792B03DE6700716594 /* XCLocalSwiftPackageReference ".." */,
+			);
 			productRefGroup = AA9B95692B03DE2800716594 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -269,6 +279,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = DateSliderDemo/DateSliderDemo.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"DateSliderDemo/Preview Content\"";
@@ -287,6 +298,9 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.stevengharris.DateSliderDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SUPPORTS_MACCATALYST = YES;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -298,6 +312,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = DateSliderDemo/DateSliderDemo.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"DateSliderDemo/Preview Content\"";
@@ -316,6 +331,9 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.stevengharris.DateSliderDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SUPPORTS_MACCATALYST = YES;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -344,6 +362,20 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCLocalSwiftPackageReference section */
+		AA9B95792B03DE6700716594 /* XCLocalSwiftPackageReference ".." */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = ..;
+		};
+/* End XCLocalSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		AA9B957A2B03DE6700716594 /* DateSlider */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = DateSlider;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = AA9B95602B03DE2800716594 /* Project object */;
 }
