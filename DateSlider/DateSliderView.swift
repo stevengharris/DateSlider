@@ -24,7 +24,13 @@ public struct DateSliderView: View {
     let lastDateIndex: Int
     
     /// A subsequence of `datedObjects` starting with `leadingDate` and ending with `trailingDate`.
-    var boundedDatedObjects: any DatedObjectCollection { datedObjects[leadingDateIndex...trailingDateIndex] as! any DatedObjectCollection}
+    var boundedDatedObjects: any DatedObjectCollection {
+        if datedObjects.count > 1 {
+            return datedObjects[leadingDateIndex...trailingDateIndex] as! any DatedObjectCollection
+        } else {
+            return datedObjects
+        }
+    }
     /// The date of the first DatedObject in `boundedDatedObjects`.
     var leadingDate: Date { datedObjects[leadingDateIndex].date }
     /// The date of the last DatedObject in `boundedDatedObjects`.
@@ -121,44 +127,47 @@ public struct DateSliderView: View {
                     // rectangle. It will generally sit over the top of the selected date, except
                     // while it's sliding, the highlighted tick mark may be outside of it before
                     // it snaps to position.
-                    Color.clear.contentShape(Rectangle())
-                        .frame(width: sliderWidth)
-                        .offset(x: sliderWidth / 2)
-                        .overlay {
-                            // The date label offset starts at half of the slider width when at
-                            // the leading edge, will reach zero at the middle, and minus half
-                            // the slider width on the trailing edge.
-                            Label(format(sliderDate), image: "calendar")
-                                .frame(width: sliderWidth)
-                                .labelStyle(.titleOnly)
-                                .background(sliderBackground())
-                                .cornerRadius(2)
-                                .overlay(
-                                    RoundedRectangle(cornerRadius: 2)
-                                        .strokeBorder(tickColor(true), lineWidth: 1, antialiased: true)
-                                )
-                                .offset(x: labelOffset(sliderWidth: sliderWidth, in: width))
-                        }
-                        .zIndex(2)
-                        .position(CGPoint(x: offset(from: draggingDate, in: width), y: geometry.size.height / 2))
-                        .gesture(drag(in: width))
+                    if boundedDatedObjects.count > 1 {
+                        Color.clear.contentShape(Rectangle())
+                            .frame(width: sliderWidth)
+                            .offset(x: sliderWidth / 2)
+                            .overlay {
+                                // The date label offset starts at half of the slider width when at
+                                // the leading edge, will reach zero at the middle, and minus half
+                                // the slider width on the trailing edge.
+                                Label(format(sliderDate), image: "calendar")
+                                    .frame(width: sliderWidth)
+                                    .labelStyle(.titleOnly)
+                                    .background(sliderBackground())
+                                    .cornerRadius(2)
+                                    .overlay(
+                                        RoundedRectangle(cornerRadius: 2)
+                                            .strokeBorder(tickColor(true), lineWidth: 1, antialiased: true)
+                                    )
+                                    .offset(x: labelOffset(sliderWidth: sliderWidth, in: width))
+                            }
+                            .zIndex(2)
+                            .position(CGPoint(x: offset(from: draggingDate, in: width), y: geometry.size.height / 2))
+                            .gesture(drag(in: width))
+                    }
                 }
             }
         }
     }
     
-    public init(datedObjects: some DatedObjectCollection, format: DateFormat, onDateSelect: @escaping (Date)->()) {
-        assert(datedObjects.count > 1, "Must supply at least 2 datedObjects.")
-        self.datedObjects = datedObjects
+    public init(datedObjects: (some DatedObjectCollection)?, format: DateFormat, onDateSelect: @escaping (Date)->()) {
+        // When datedObjects is or empty (for example, the branch has not been selected),
+        // we still want the DateSliderView to show properly.
+        self.datedObjects = datedObjects ?? Array<Date>()
         firstDateIndex = self.datedObjects.startIndex
-        lastDateIndex = self.datedObjects.endIndex - 1
-        ascendingOrder = datedObjects[firstDateIndex].date < datedObjects[firstDateIndex + 1].date
+        lastDateIndex = max(0, self.datedObjects.endIndex - 1)
+        ascendingOrder = (datedObjects?.first?.date ?? Date()) < (datedObjects?.last?.date ?? Date().addingTimeInterval(1))
         self.format = format
         self.onDateSelect = onDateSelect
         _leadingDateIndex = State(initialValue: firstDateIndex)
         _trailingDateIndex = State(initialValue: lastDateIndex)
         _selectedDateIndex = State(initialValue: firstDateIndex)
-        _draggingDate = State(initialValue: self.datedObjects[firstDateIndex].date)
+        _draggingDate = State(initialValue: self.datedObjects.first?.date ?? Date())
         _sliderDateIndex = State(initialValue: firstDateIndex)
     }
     
@@ -306,8 +315,9 @@ public struct DateSliderView: View {
     /// large `boundedDatedObjects`.
     func tickOffsets(in width: CGFloat) -> [CGFloat] {
         let roundWidth = width.rounded(.towardZero)
-        var offsets: [CGFloat] = [offset(from: boundedDatedObjects.first!.date, in: roundWidth).rounded(.towardZero)]
-        var previousOffset = offsets[0]
+        let previousDate = boundedDatedObjects.first?.date
+        var previousOffset = previousDate == nil ? 0 : offset(from: previousDate!, in: roundWidth).rounded(.towardZero)
+        var offsets: [CGFloat] = []
         for index in boundedDatedObjects.indices {
             let nextOffset = offset(from: boundedDatedObjects[index].date, in: roundWidth).rounded(.towardZero)
             if nextOffset > previousOffset {
