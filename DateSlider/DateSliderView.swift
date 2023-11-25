@@ -16,8 +16,8 @@ public struct DateSliderView: View {
     let ascendingOrder: Bool
     /// The format for for a string represenation of `draggingDate`.
     let format: DateFormat
-    /// Closure executed when dragging ends.
-    let onDateSelect: (Date)->()
+    /// Closure passing `sliderDateIndex`, executed when dragging ends.
+    let onDateSelect: (Int)->()
     /// Simplify access to datedObjects.startIndex, which never changes.
     let firstDateIndex: Int
     /// Simplify access to datedObjects.endIndex - 1, which never changes.
@@ -155,7 +155,7 @@ public struct DateSliderView: View {
         }
     }
     
-    public init(datedObjects: (some DatedObjectCollection)?, format: DateFormat, onDateSelect: @escaping (Date)->()) {
+    public init(datedObjects: (some DatedObjectCollection)?, format: DateFormat, onDateSelect: @escaping (Int)->(), selectedDateIndex: Int? = nil) {
         // When datedObjects is or empty (for example, the branch has not been selected),
         // we still want the DateSliderView to show properly.
         self.datedObjects = datedObjects ?? Array<Date>()
@@ -166,8 +166,8 @@ public struct DateSliderView: View {
         self.onDateSelect = onDateSelect
         _leadingDateIndex = State(initialValue: firstDateIndex)
         _trailingDateIndex = State(initialValue: lastDateIndex)
-        _selectedDateIndex = State(initialValue: firstDateIndex)
-        _draggingDate = State(initialValue: self.datedObjects.first?.date ?? Date())
+        _selectedDateIndex = State(initialValue: selectedDateIndex ?? self.firstDateIndex)
+        _draggingDate = State(initialValue: (self.datedObjects.isEmpty ? Date() : self.datedObjects[_selectedDateIndex.wrappedValue].date))
         _sliderDateIndex = State(initialValue: firstDateIndex)
     }
     
@@ -239,7 +239,7 @@ public struct DateSliderView: View {
         selectedDateIndex = index
         draggingDate = date
         sliderDateIndex = index
-        onDateSelect(date)
+        onDateSelect(index)
     }
     
     //MARK: Conversions in width
@@ -498,8 +498,8 @@ struct DateSliderView_Previews: PreviewProvider {
         DateSliderView(datedObjects: dates, format: DateFormat.shortDateTimeLocal, onDateSelect: onDateSelect)
     }
     
-    static func onDateSelect(_ date: Date) {
-        print("Selected \(date)")
+    static func onDateSelect(_ index: Int) {
+        print("Selected index \(index)")
     }
 
 }
