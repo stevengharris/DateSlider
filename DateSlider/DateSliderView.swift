@@ -8,23 +8,38 @@
 import SwiftUI
 
 public struct DateSliderView: View {
-
-    /// All datedObjects that can be selected-from. Large DatedObjectCollections should use OrderedSet so that
-    /// selections by date are O(1) and identifying the nearest date to the slider position is not O(n).
-    let datedObjects: any DatedObjectCollection
+    public typealias T = any DatedObjectCollection
+    
     /// Whether the order for the `datedObjects` and `boundedDatedObjects` was specified as `.orderedAscending`.
     let ascendingOrder: Bool
     /// The format for for a string represenation of `draggingDate`.
     let format: DateFormat
+    
+    /// The index of the DatedObject that is currently selected, which changes when dragging ends.
+    @Binding private var selectedDateIndex: Int
+    
+    /// All datedObjects that can be selected-from. Large DatedObjectCollections should use OrderedSet so that
+    /// selections by date are O(1) and identifying the nearest date to the slider position is not O(n).
+    @State private var datedObjects: T
     /// Simplify access to datedObjects.startIndex, which never changes.
-    let firstDateIndex: Int
+    @State private var firstDateIndex: Int = 0
     /// Simplify access to datedObjects.endIndex - 1, which never changes.
-    let lastDateIndex: Int
+    @State private var lastDateIndex: Int = 0
+    /// The index of the first DatedObject within `boundedDatedObjects`, may change during `zoomIn` and `zoomOut`.
+    @State private var leadingDateIndex: Int = 0
+    /// The index of the last DatedObject within `boundedDatedObjects`, may change during `zoomIn` and `zoomOut`.
+    @State private var trailingDateIndex: Int = 0
+    /// The date that the slider is positioned-at, not necessarily the same as `selectedDate`.
+    @State private var draggingDate: Date = Date()
+    /// The index of the DatedObject shown in the slider label, which is where it will snap-to when released.
+    @State private var sliderDateIndex: Int = 0
+    /// The previous location.x of the drag point, used to allow smooth drag from the pointer position.
+    @State private var previousPosition: CGFloat?
     
     /// A subsequence of `datedObjects` starting with `leadingDate` and ending with `trailingDate`.
-    var boundedDatedObjects: any DatedObjectCollection {
+    var boundedDatedObjects: T {
         if datedObjects.count > 1 {
-            return datedObjects[leadingDateIndex...trailingDateIndex] as! any DatedObjectCollection
+            return datedObjects[leadingDateIndex...trailingDateIndex] as! T
         } else {
             return datedObjects
         }
@@ -37,19 +52,6 @@ public struct DateSliderView: View {
     var selectedDate: Date { datedObjects[selectedDateIndex].date }
     /// The date shown in the slider label, which is where it will snap-to when released.
     var sliderDate: Date { datedObjects[sliderDateIndex].date }
-    
-    /// The index of the first DatedObject within `boundedDatedObjects`, may change during `zoomIn` and `zoomOut`.
-    @State var leadingDateIndex: Int
-    /// The index of the last DatedObject within `boundedDatedObjects`, may change during `zoomIn` and `zoomOut`.
-    @State var trailingDateIndex: Int
-    /// The index of the DatedObject that is currently selected, which changes when dragging ends.
-    @Binding var selectedDateIndex: Int
-    /// The date that the slider is positioned-at, not necessarily the same as `selectedDate`.
-    @State var draggingDate: Date
-    /// The index of the DatedObject shown in the slider label, which is where it will snap-to when released.
-    @State var sliderDateIndex: Int
-    /// The previous location.x of the drag point, used to allow smooth drag from the pointer position.
-    @State private var previousPosition: CGFloat?
     
     public var body: some View {
         //let _ = Self._printChanges()
@@ -149,23 +151,28 @@ public struct DateSliderView: View {
                             .gesture(drag(in: width))
                     }
                 }
+                .onAppear {
+                    setDateIndices()
+                }
             }
         }
     }
     
-    public init(datedObjects: (some DatedObjectCollection)?, datedObjectsIndex: Binding<Int>? = nil, format: DateFormat) {
-        // When datedObjects is or empty (for example, the branch has not been selected),
-        // we still want the DateSliderView to show properly.
-        self.datedObjects = datedObjects ?? Array<Date>()
-        firstDateIndex = self.datedObjects.startIndex
-        lastDateIndex = max(0, self.datedObjects.endIndex - 1)
-        ascendingOrder = (datedObjects?.first?.date ?? Date()) < (datedObjects?.last?.date ?? Date().addingTimeInterval(1))
+    func setDateIndices() {
+        firstDateIndex = datedObjects.startIndex
+        lastDateIndex = max(firstDateIndex, datedObjects.endIndex - 1)
+        leadingDateIndex = firstDateIndex
+        trailingDateIndex = lastDateIndex
+        draggingDate = datedObjects.isEmpty ? Date() : datedObjects[firstDateIndex].date
+        sliderDateIndex = firstDateIndex
+    }
+    
+    public init(datedObjects: T, datedObjectsIndex: Binding<Int>, format: DateFormat) {
+        _datedObjects = State(initialValue: datedObjects)
+        _selectedDateIndex = datedObjectsIndex
         self.format = format
-        _leadingDateIndex = State(initialValue: firstDateIndex)
-        _trailingDateIndex = State(initialValue: lastDateIndex)
-        _selectedDateIndex = datedObjectsIndex ?? .constant(self.firstDateIndex)
-        _draggingDate = State(initialValue: (self.datedObjects.isEmpty ? Date() : self.datedObjects[_selectedDateIndex.wrappedValue].date))
-        _sliderDateIndex = State(initialValue: firstDateIndex)
+        ascendingOrder = (datedObjects.first?.date ?? Date()) < (datedObjects.last?.date ?? Date().addingTimeInterval(1))
+        _draggingDate = State(initialValue: (datedObjects.isEmpty ? Date() : datedObjects[datedObjectsIndex.wrappedValue].date))
     }
     
     //MARK: Colors
@@ -483,15 +490,15 @@ public struct DateSliderView: View {
 
 }
 
-struct DateSliderView_Previews: PreviewProvider {
-
-    static var previews: some View {
-        let dates = [
-            Date(),
-            Date().addingTimeInterval(100000),
-            Date().addingTimeInterval(200000),
-        ]
-        DateSliderView(datedObjects: dates, format: DateFormat.shortDateTimeLocal)
-    }
-
-}
+//struct DateSliderView_Previews: PreviewProvider {
+//
+//    static var previews: some View {
+//        let dates = [
+//            Date(),
+//            Date().addingTimeInterval(100000),
+//            Date().addingTimeInterval(200000),
+//        ]
+//        DateSliderView(datedObjects: dates, format: DateFormat.shortDateTimeLocal)
+//    }
+//
+//}

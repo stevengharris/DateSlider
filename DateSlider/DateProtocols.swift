@@ -35,12 +35,21 @@ extension Date: DatedObject {
 /// The extensions allow the DateSlider to accept both Array<DatedObject> and OrderedSet<DatedObject> , and
 /// by extension of Date to conform to DatedObject, also Array<Date> and OrderedSet<Date>.
 public protocol DatedObjectCollection: RandomAccessCollection where Element: DatedObject, Index == Int, SubSequence: RandomAccessCollection {
+    associatedtype T
 }
 
-extension OrderedSet: DatedObjectCollection where Element: DatedObject, SubSequence == OrderedSet.SubSequence {}
+extension OrderedSet: DatedObjectCollection where Element: DatedObject, Indices == OrderedSet.Indices, SubSequence == OrderedSet.SubSequence {
+    public typealias T = OrderedSet
+}
 
-extension OrderedSet.SubSequence: DatedObjectCollection where Element: DatedObject {}
+extension OrderedSet.SubSequence: DatedObjectCollection where Element: DatedObject {
+    public typealias T = OrderedSet
+}
 
-extension Array: DatedObjectCollection where Element: DatedObject, SubSequence == ArraySlice<Element> {}
+extension Array: DatedObjectCollection where Element: DatedObject, Indices == Array.Indices, SubSequence == ArraySlice<Element> {
+    public typealias T = Array
+}
 
-extension ArraySlice: DatedObjectCollection where Element: DatedObject {}
+extension ArraySlice: DatedObjectCollection where Element: DatedObject {
+    public typealias T = ArraySlice
+}
