@@ -22,17 +22,17 @@ public struct DateSliderView: View {
     /// selections by date are O(1) and identifying the nearest date to the slider position is not O(n).
     @State private var datedObjects: T
     /// Simplify access to datedObjects.startIndex, which never changes.
-    @State private var firstDateIndex: Int = 0
+    @State private var firstDateIndex: Int
     /// Simplify access to datedObjects.endIndex - 1, which never changes.
-    @State private var lastDateIndex: Int = 0
+    @State private var lastDateIndex: Int
     /// The index of the first DatedObject within `boundedDatedObjects`, may change during `zoomIn` and `zoomOut`.
-    @State private var leadingDateIndex: Int = 0
+    @State private var leadingDateIndex: Int
     /// The index of the last DatedObject within `boundedDatedObjects`, may change during `zoomIn` and `zoomOut`.
-    @State private var trailingDateIndex: Int = 0
+    @State private var trailingDateIndex: Int
     /// The date that the slider is positioned-at, not necessarily the same as `selectedDate`.
-    @State private var draggingDate: Date = Date()
+    @State private var draggingDate: Date
     /// The index of the DatedObject shown in the slider label, which is where it will snap-to when released.
-    @State private var sliderDateIndex: Int = 0
+    @State private var sliderDateIndex: Int
     /// The previous location.x of the drag point, used to allow smooth drag from the pointer position.
     @State private var previousPosition: CGFloat?
     
@@ -151,28 +151,29 @@ public struct DateSliderView: View {
                             .gesture(drag(in: width))
                     }
                 }
-                .onAppear {
-                    setDateIndices()
-                }
             }
         }
     }
     
-    func setDateIndices() {
-        firstDateIndex = datedObjects.startIndex
-        lastDateIndex = max(firstDateIndex, datedObjects.endIndex - 1)
-        leadingDateIndex = firstDateIndex
-        trailingDateIndex = lastDateIndex
-        draggingDate = datedObjects.isEmpty ? Date() : datedObjects[firstDateIndex].date
-        sliderDateIndex = firstDateIndex
-    }
-    
+    /// Initialize the DateSliderView with the `datedObjects` it holds, the index into those datedObjects it should point to, and the `format`.
+    ///
+    /// Note that the way to update the DateSliderView is to replace it via its `id` in the containing view. Otherwise, the underlying
+    /// DatedObjectsCollection would need to be equatable to cause a change, and while it very well might be equatable, you probably
+    /// for example, don't want this view to update based on whether every datedObject is == and in the same order. Far better for the
+    /// containing view which has the context for what's in this one make the decision about whether the `id` changes.
     public init(datedObjects: T, datedObjectsIndex: Binding<Int>, format: DateFormat) {
         _datedObjects = State(initialValue: datedObjects)
         _selectedDateIndex = datedObjectsIndex
         self.format = format
         ascendingOrder = (datedObjects.first?.date ?? Date()) < (datedObjects.last?.date ?? Date().addingTimeInterval(1))
-        _draggingDate = State(initialValue: (datedObjects.isEmpty ? Date() : datedObjects[datedObjectsIndex.wrappedValue].date))
+        let startIndex = datedObjects.startIndex
+        let endIndex = max(datedObjects.startIndex, datedObjects.endIndex - 1)
+        _firstDateIndex = State(initialValue: startIndex)
+        _lastDateIndex = State(initialValue: endIndex)
+        _leadingDateIndex = State(initialValue: startIndex)
+        _trailingDateIndex = State(initialValue: endIndex)
+        _draggingDate = State(initialValue: datedObjects.isEmpty ? Date() : datedObjects[datedObjectsIndex.wrappedValue].date)
+        _sliderDateIndex = State(initialValue: datedObjectsIndex.wrappedValue)
     }
     
     //MARK: Colors
